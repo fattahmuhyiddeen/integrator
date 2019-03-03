@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/fattahmuhyiddeen/integrator/model"
 	"github.com/joho/godotenv"
 )
 
@@ -22,6 +23,11 @@ func main() {
 	// fmt.Println(time.Now().Truncate(time.Minute))
 	// t2, e := time.Parse(form, "8 41 PM")
 	p := fmt.Println
+
+	model.GetAllUsers()
+	if true {
+		return
+	}
 	for {
 		err := godotenv.Load("config.txt")
 		if err != nil {
