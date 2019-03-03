@@ -10,7 +10,7 @@ func GetAllUsers() {
 	connectPG()
 	defer disconnectPG()
 
-	rows, _ := PGDB.Query(`SELECT name FROM users`)
+	rows, _ := PgDB.Query(`SELECT name FROM users`)
 
 	for rows.Next() {
 		var row User

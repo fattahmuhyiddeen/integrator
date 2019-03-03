@@ -7,6 +7,8 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+
+	//blank import to init database here
 	_ "github.com/lib/pq"
 )
 
@@ -16,31 +18,31 @@ func checkErr(err error) {
 	}
 }
 
-var MAIN_DB_USER string
-var MAIN_DB_PASSWORD string
-var MAIN_DB_NAME string
+var mainDBUser string
+var mainDBPassword string
+var mainDBName string
 
 func init() {
 	err := godotenv.Load("config.txt")
 	if err != nil {
 		log.Fatal("Error cannot log config.txt")
 	}
-	MAIN_DB_USER = os.Getenv("MAIN_DB_USER")
-	MAIN_DB_PASSWORD = os.Getenv("MAIN_DB_PASSWORD")
-	MAIN_DB_NAME = os.Getenv("MAIN_DB_NAME")
-
+	mainDBUser = os.Getenv("MAIN_DB_USER")
+	mainDBPassword = os.Getenv("MAIN_DB_PASSWORD")
+	mainDBName = os.Getenv("MAIN_DB_NAME")
 }
 
-var PGDB *sql.DB
+//PgDB is instance of postgreSQL
+var PgDB *sql.DB
 
 func connectPG() {
 	dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
-		MAIN_DB_USER, MAIN_DB_PASSWORD, MAIN_DB_NAME)
+		mainDBUser, mainDBPassword, mainDBName)
 	var err error
-	PGDB, err = sql.Open("postgres", dbinfo)
+	PgDB, err = sql.Open("postgres", dbinfo)
 	checkErr(err)
 }
 
 func disconnectPG() {
-	PGDB.Close()
+	PgDB.Close()
 }
