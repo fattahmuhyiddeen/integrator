@@ -11,9 +11,9 @@ func GetAllUsers() {
 	// defer disconnectDB1()
 	// rows, _ := DB1.Query(`SELECT name FROM users`)
 
-	connectDB2()
-	defer disconnectDB2()
-	rows, _ := DB2.Query(`SELECT name FROM users`)
+	connectDB1()
+	defer disconnectDB1()
+	rows, _ := DB1.Query(`SELECT name FROM users`)
 
 	for rows.Next() {
 		var row User

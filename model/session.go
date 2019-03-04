@@ -68,21 +68,30 @@ func getDriver(driver string) string {
 	return ""
 }
 
+func getDBInfo(server, port, user, password, name, driver string) string {
+	dbinfo := ""
+	if driver == "postgres" {
+		dbinfo = fmt.Sprintf("host=%s user=%s password=%s port=%s dbname=%s sslmode=disable",
+			server, user, password, port, name)
+	} else if driver == "sqlserver" {
+		dbinfo = fmt.Sprintf("server=%s;user id=%s;password=%s;port=%s;database=%s;",
+			server, user, password, port, name)
+	}
+
+	return dbinfo
+}
+
 func connectDB1() {
 	var err error
-	dbinfo := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%s;database=%s;",
-		DB1Server, DB1User, DB1Password, DB1Port, DB1Name)
-	DB1, err = sql.Open(getDriver(DB1Driver), dbinfo)
+	driver := getDriver(DB1Driver)
+	DB1, err = sql.Open(driver, getDBInfo(DB1Server, DB1Port, DB1User, DB1Password, DB1Name, driver))
 	checkErr(err)
 }
 
 func connectDB2() {
 	var err error
-	dbinfo := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%s;database=%s;",
-		DB2Server, DB2User, DB2Password, DB2Port, DB2Name)
-	fmt.Println(dbinfo)
-	fmt.Println(getDriver(DB2Driver))
-	DB2, err = sql.Open(getDriver(DB2Driver), dbinfo)
+	driver := getDriver(DB2Driver)
+	DB2, err = sql.Open(driver, getDBInfo(DB2Server, DB2Port, DB2User, DB2Password, DB2Name, driver))
 	checkErr(err)
 }
 
