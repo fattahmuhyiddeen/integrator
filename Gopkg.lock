@@ -20,12 +20,21 @@
   revision = "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79"
   version = "v1.0.0"
 
+[[projects]]
+  branch = "master"
+  digest = "1:12a63c0310fdbca78bf7d4cf00435e71313d7c70555fbc688c9f29c8c9e3e737"
+  name = "github.com/minus5/gofreetds"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "c92a62efdcd564ac238e10e09a61aa93146ed800"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/joho/godotenv",
     "github.com/lib/pq",
+    "github.com/minus5/gofreetds",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

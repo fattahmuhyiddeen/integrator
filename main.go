@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/fattahmuhyiddeen/integrator/model"
 	"github.com/joho/godotenv"
 )
 
@@ -23,27 +24,27 @@ func main() {
 	// t2, e := time.Parse(form, "8 41 PM")
 	p := fmt.Println
 
-	// model.GetAllUsers()
-	// if true {
-	// 	return
-	// }
+	model.GetAllUsers()
+	if true {
+		return
+	}
 	for {
 		err := godotenv.Load("config.txt")
 		if err != nil {
 			log.Fatal("Error cannot log config.txt")
 		}
-		timeToFetchFromERP := os.Getenv("TIME_TO_FETCH_FROM_ERP")
-		timeToFetchFromMainDatabase := os.Getenv("TIME_TO_FETCH_FROM_MAIN_DATABASE")
+		timeToFetchFromDB1 := os.Getenv("TIME_TO_FETCH_FROM_DB1")
+		timeToFetchFromDB2 := os.Getenv("TIME_TO_FETCH_FROM_DB2")
 
 		t := time.Now()
 		timeString := ""
 		timeString = t.Format("3:04PM")
 
-		p(timeToFetchFromMainDatabase)
+		p(timeToFetchFromDB2)
 
 		p(timeString)
-		p(timeToFetchFromERP + " time from env")
-		if timeString == timeToFetchFromERP {
+		p(timeToFetchFromDB1 + " time from env")
+		if timeString == timeToFetchFromDB1 {
 			p("triggered")
 			time.Sleep(1 * time.Minute)
 		}

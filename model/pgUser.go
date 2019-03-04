@@ -7,15 +7,18 @@ type User struct {
 }
 
 func GetAllUsers() {
-	connectPG()
-	defer disconnectPG()
+	// connectDB1()
+	// defer disconnectDB1()
+	// rows, _ := DB1.Query(`SELECT name FROM users`)
 
-	rows, _ := PgDB.Query(`SELECT name FROM users`)
+	connectDB2()
+	defer disconnectDB2()
+	rows, _ := DB2.Query(`SELECT name FROM users`)
 
 	for rows.Next() {
 		var row User
 		if err := rows.Scan(&row.name); err != nil {
-			// do something with error
+			fmt.Println(err)
 		} else {
 			fmt.Println(row.name)
 		}
