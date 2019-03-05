@@ -1,0 +1,16 @@
+TIME_TO_FETCH_FROM_DB1=12:00AM;11:00AM
+TIME_TO_FETCH_FROM_DB2=12:00AM
+
+DB1_SERVER=1.1.1.1
+DB1_PORT=1433
+DB1_USER=database_user
+DB1_PASSWORD=database_password
+DB1_NAME=database_name
+DB1_DRIVER=mssql
+
+DB2_SERVER=www.google.com
+DB2_PORT=5432
+DB2_USER=database_user
+DB2_PASSWORD=database_password
+DB2_NAME=database_name
+DB2_DRIVER=pgsql
