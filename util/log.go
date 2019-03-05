@@ -17,7 +17,6 @@ func Logg(text string) error {
 	if err != nil {
 		d1 := []byte(text)
 		ioutil.WriteFile(logFile, d1, 0755)
-		// return err
 	}
 	defer f.Close()
 

@@ -61,18 +61,17 @@ func init() {
 	DB2Driver = os.Getenv("DB2_DRIVER")
 	DB2Server = os.Getenv("DB2_SERVER")
 	DB2Port = os.Getenv("DB2_PORT")
-
 }
 
+//TestConnection is the function to check connection with databases. if fail to connect, it will crash the system. need to restart
 func TestConnection(db string) {
-	query := ""
 	if db == "DB1" {
 		connectDB1()
 		defer disconnectDB1()
 		if getDriver(DB1Driver) == MssqlDriver {
 			SelectVersion(DB1, "DB1 ("+DB1Server+")")
 		} else if getDriver(DB1Driver) == PostgresDriver {
-			query = `SELECT * FROM pg_catalog.pg_tables`
+			query := `SELECT * FROM pg_catalog.pg_tables`
 			_, err := DB1.Query(query)
 			checkErr(err, "DB1 ("+DB1Server+")")
 		}
@@ -82,12 +81,11 @@ func TestConnection(db string) {
 		if getDriver(DB2Driver) == MssqlDriver {
 			SelectVersion(DB2, "DB2 ("+DB2Server+")")
 		} else if getDriver(DB2Driver) == PostgresDriver {
-			query = `SELECT * FROM pg_catalog.pg_tables`
+			query := `SELECT * FROM pg_catalog.pg_tables`
 			_, err := DB2.Query(query)
 			checkErr(err, "DB2 ("+DB2Server+")")
 		}
 	}
-
 }
 
 var DB1 *sql.DB
