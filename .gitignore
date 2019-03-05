@@ -14,3 +14,7 @@
 
 # Ignore config file for security reason
 config.txt
+
+# Log and temps
+error.txt
+log.txt

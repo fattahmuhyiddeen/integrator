@@ -6,7 +6,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/fattahmuhyiddeen/integrator/model"
+	FMIUtil "github.com/fattahmuhyiddeen/integrator/util"
+
+	// "github.com/fattahmuhyiddeen/integrator/model"
 	"github.com/joho/godotenv"
 )
 
@@ -24,7 +26,9 @@ func main() {
 	// t2, e := time.Parse(form, "8 41 PM")
 	p := fmt.Println
 
-	model.GetAllUsers()
+	FMIUtil.Logg("Integrator started")
+
+	// model.GetAllUsers()
 	if true {
 		return
 	}

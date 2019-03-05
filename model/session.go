@@ -8,6 +8,8 @@ import (
 	"os"
 	"strings"
 
+	FMIUtil "github.com/fattahmuhyiddeen/integrator/util"
+
 	"github.com/joho/godotenv"
 
 	//blank import to init database here
@@ -15,8 +17,9 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func checkErr(err error) {
+func checkErr(err error, db string) {
 	if err != nil {
+		FMIUtil.Logg("Cannot connect to " + db)
 		panic(err)
 	}
 }
@@ -77,7 +80,6 @@ func getDBInfo(server, port, user, password, name, driver string) string {
 		dbinfo = fmt.Sprintf("server=%s;user id=%s;password=%s;port=%s;database=%s;",
 			server, user, password, port, name)
 	}
-
 	return dbinfo
 }
 
@@ -85,23 +87,15 @@ func connectDB1() {
 	var err error
 	driver := getDriver(DB1Driver)
 	DB1, err = sql.Open(driver, getDBInfo(DB1Server, DB1Port, DB1User, DB1Password, DB1Name, driver))
-	checkErr(err)
+	checkErr(err, "DB1 ("+DB1Server+")")
 }
 
 func connectDB2() {
 	var err error
 	driver := getDriver(DB2Driver)
 	DB2, err = sql.Open(driver, getDBInfo(DB2Server, DB2Port, DB2User, DB2Password, DB2Name, driver))
-	checkErr(err)
+	checkErr(err, "DB2 ("+DB2Server+")")
 }
-
-// func connectDB2() {
-// 	dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
-// 		DB2User, DB2Password, DB2Name)
-// 	var err error
-// 	DB2, err = sql.Open(getDriver(DB2Driver), dbinfo)
-// 	checkErr(err)
-// }
 
 func disconnectDB1() {
 	DB1.Close()
@@ -111,6 +105,7 @@ func disconnectDB2() {
 	DB2.Close()
 }
 
+// SelectVersion is to detect MS SQL Database version
 func SelectVersion(db *sql.DB) {
 	// Use background context
 	ctx := context.Background()
