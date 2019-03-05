@@ -19,10 +19,15 @@ import (
 
 func checkErr(err error, db string) {
 	if err != nil {
-		FMIUtil.Logg("Cannot connect to " + db)
+		FMIUtil.Logg("Failed to connect to " + db)
 		panic(err)
+	} else {
+		FMIUtil.Logg("Successfully connected to " + db)
 	}
 }
+
+const PostgresDriver = "postgres"
+const MssqlDriver = "sqlserver"
 
 var DB1User string
 var DB1Password string
@@ -56,6 +61,33 @@ func init() {
 	DB2Driver = os.Getenv("DB2_DRIVER")
 	DB2Server = os.Getenv("DB2_SERVER")
 	DB2Port = os.Getenv("DB2_PORT")
+
+}
+
+func TestConnection(db string) {
+	query := ""
+	if db == "DB1" {
+		connectDB1()
+		defer disconnectDB1()
+		if getDriver(DB1Driver) == MssqlDriver {
+			SelectVersion(DB1, "DB1 ("+DB1Server+")")
+		} else if getDriver(DB1Driver) == PostgresDriver {
+			query = `SELECT * FROM pg_catalog.pg_tables`
+			_, err := DB1.Query(query)
+			checkErr(err, "DB1 ("+DB1Server+")")
+		}
+	} else if db == "DB2" {
+		connectDB2()
+		defer disconnectDB2()
+		if getDriver(DB2Driver) == MssqlDriver {
+			SelectVersion(DB2, "DB2 ("+DB2Server+")")
+		} else if getDriver(DB2Driver) == PostgresDriver {
+			query = `SELECT * FROM pg_catalog.pg_tables`
+			_, err := DB2.Query(query)
+			checkErr(err, "DB2 ("+DB2Server+")")
+		}
+	}
+
 }
 
 var DB1 *sql.DB
@@ -63,20 +95,20 @@ var DB2 *sql.DB
 
 func getDriver(driver string) string {
 	if strings.Contains(driver, "post") || strings.Contains(driver, "pg") || strings.Contains(driver, "gres") {
-		return "postgres"
+		return PostgresDriver
 	}
 	if strings.Contains(driver, "ms") || strings.Contains(driver, "sqlserver") || strings.Contains(driver, "microsoft") {
-		return "sqlserver"
+		return MssqlDriver
 	}
 	return ""
 }
 
 func getDBInfo(server, port, user, password, name, driver string) string {
 	dbinfo := ""
-	if driver == "postgres" {
+	if driver == PostgresDriver {
 		dbinfo = fmt.Sprintf("host=%s user=%s password=%s port=%s dbname=%s sslmode=disable",
 			server, user, password, port, name)
-	} else if driver == "sqlserver" {
+	} else if driver == MssqlDriver {
 		dbinfo = fmt.Sprintf("server=%s;user id=%s;password=%s;port=%s;database=%s;",
 			server, user, password, port, name)
 	}
@@ -106,7 +138,7 @@ func disconnectDB2() {
 }
 
 // SelectVersion is to detect MS SQL Database version
-func SelectVersion(db *sql.DB) {
+func SelectVersion(db *sql.DB, dbname string) {
 	// Use background context
 	ctx := context.Background()
 
@@ -114,7 +146,8 @@ func SelectVersion(db *sql.DB) {
 	// Important for handling network issues and long queries.
 	err := db.PingContext(ctx)
 	if err != nil {
-		log.Fatal("Error pinging database: " + err.Error())
+		checkErr(err, dbname)
+		// log.Fatal("Error pinging database: " + err.Error())
 	}
 
 	var result string

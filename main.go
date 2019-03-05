@@ -1,11 +1,14 @@
 package main
 
+//https://flaviocopes.com/go-date-time-format/
+
 import (
 	"fmt"
 	"log"
 	"os"
 	"time"
 
+	"github.com/fattahmuhyiddeen/integrator/model"
 	FMIUtil "github.com/fattahmuhyiddeen/integrator/util"
 
 	// "github.com/fattahmuhyiddeen/integrator/model"
@@ -22,11 +25,11 @@ func contains(s []string, e string) bool {
 }
 
 func main() {
-	// fmt.Println(time.Now().Truncate(time.Minute))
-	// t2, e := time.Parse(form, "8 41 PM")
 	p := fmt.Println
 
 	FMIUtil.Logg("Integrator started")
+	model.TestConnection("DB1")
+	model.TestConnection("DB2")
 
 	// model.GetAllUsers()
 	if true {
